@@ -7,9 +7,9 @@ namespace TestCRM.DAL.Interfaces
 {
     public interface ILeadRepository
     {
-        Task<int> CreateLeadAsync(LeadEntity lead);
-        Task<int> UpdateLeadAsync(LeadEntity lead);
-        Task<int> DeleteLeadAsync(int id);
+        Task<int> CreateLeadAsync(LeadEntity lead, CancellationToken ct = default);
+        Task<int> UpdateLeadAsync(LeadEntity lead, CancellationToken ct = default);
+        Task<int> DeleteLeadAsync(int id, CancellationToken ct = default);
         Task<LeadEntity?> GetLeadByIdAsync(int id);
         Task<IEnumerable<LeadEntity>> GetAllLeadsAsync();
     }

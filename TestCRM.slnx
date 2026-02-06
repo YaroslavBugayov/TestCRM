@@ -3,6 +3,7 @@
     <Build />
     <Deploy />
   </Project>
+  <Project Path="TestCRM.BLL/TestCRM.BLL.csproj" Id="a8ae6495-7e7e-455a-a0cb-9b7d1bec459a" />
   <Project Path="TestCRM.DAL/TestCRM.DAL.csproj" />
   <Project Path="TestCRM.PL.Service/TestCRM.PL.Service.csproj" />
 </Solution>

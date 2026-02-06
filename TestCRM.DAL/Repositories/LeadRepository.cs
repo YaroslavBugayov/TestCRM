@@ -9,7 +9,7 @@ namespace TestCRM.DAL.Repositories
     {
         private readonly DapperContext _context = context;
 
-        public Task<int> CreateLeadAsync(LeadEntity lead)
+        public Task<int> CreateLeadAsync(LeadEntity lead, CancellationToken ct = default)
         {
             const string sql = @"
                 INSERT INTO Leads (Name, Email, Phone, CreatedAt)
@@ -17,15 +17,17 @@ namespace TestCRM.DAL.Repositories
                 SELECT CAST(SCOPE_IDENTITY() as int);";
 
             using var connection = _context.CreateConnection();
-            return connection.ExecuteScalarAsync<int>(sql, lead);
+            var command = new CommandDefinition(sql, lead, cancellationToken: ct);
+            return connection.ExecuteScalarAsync<int>(command);
         }
 
-        public Task<int> DeleteLeadAsync(int id)
+        public Task<int> DeleteLeadAsync(int id, CancellationToken ct = default)
         {
             const string sql = "DELETE FROM Leads WHERE Id = @Id;";
 
             using var connection = _context.CreateConnection();
-            return connection.ExecuteAsync(sql, new { Id = id });
+            var command = new CommandDefinition(sql, new { Id = id }, cancellationToken: ct);
+            return connection.ExecuteAsync(command);
         }
 
         public Task<IEnumerable<LeadEntity>> GetAllLeadsAsync()
@@ -44,7 +46,7 @@ namespace TestCRM.DAL.Repositories
             return connection.QuerySingleOrDefaultAsync<LeadEntity>(sql, new { Id = id });
         }
 
-        public Task<int> UpdateLeadAsync(LeadEntity lead)
+        public Task<int> UpdateLeadAsync(LeadEntity lead, CancellationToken ct = default)
         {
             const string sql = @"
                 UPDATE Leads
@@ -54,7 +56,8 @@ namespace TestCRM.DAL.Repositories
                 WHERE Id = @Id;";
 
             using var connection = _context.CreateConnection();
-            return connection.ExecuteAsync(sql, lead);
+            var command = new CommandDefinition(sql, lead, cancellationToken: ct);
+            return connection.ExecuteAsync(command);
         }
     }
 }
