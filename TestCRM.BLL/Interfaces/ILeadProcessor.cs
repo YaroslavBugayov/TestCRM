@@ -7,6 +7,6 @@ namespace TestCRM.BLL.Interfaces
 {
     public interface ILeadProcessor
     {
-        Task ProcessLeadAsync(LeadDto leadDto, CancellationToken ct = default);
+        Task<int> ProcessLeadAsync(LeadDto leadDto, CancellationToken ct = default);
     }
 }

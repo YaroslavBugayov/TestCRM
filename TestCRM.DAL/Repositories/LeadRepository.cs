@@ -9,7 +9,7 @@ namespace TestCRM.DAL.Repositories
     {
         private readonly DapperContext _context = context;
 
-        public Task<int> CreateLeadAsync(LeadEntity lead, CancellationToken ct = default)
+        public async Task<int> CreateLeadAsync(LeadEntity lead, CancellationToken ct = default)
         {
             const string sql = @"
                 INSERT INTO Leads (Name, Email, Phone, CreatedAt)
@@ -18,35 +18,35 @@ namespace TestCRM.DAL.Repositories
 
             using var connection = _context.CreateConnection();
             var command = new CommandDefinition(sql, lead, cancellationToken: ct);
-            return connection.ExecuteScalarAsync<int>(command);
+            return await connection.ExecuteScalarAsync<int>(command);
         }
 
-        public Task<int> DeleteLeadAsync(int id, CancellationToken ct = default)
+        public async Task<int> DeleteLeadAsync(int id, CancellationToken ct = default)
         {
             const string sql = "DELETE FROM Leads WHERE Id = @Id;";
 
             using var connection = _context.CreateConnection();
             var command = new CommandDefinition(sql, new { Id = id }, cancellationToken: ct);
-            return connection.ExecuteAsync(command);
+            return await connection.ExecuteAsync(command);
         }
 
-        public Task<IEnumerable<LeadEntity>> GetAllLeadsAsync()
+        public async Task<IEnumerable<LeadEntity>> GetAllLeadsAsync()
         {
             const string sql = "SELECT Id, Name, Email, Phone, CreatedAt FROM Leads;";
 
             using var connection = _context.CreateConnection();
-            return connection.QueryAsync<LeadEntity>(sql);
+            return await connection.QueryAsync<LeadEntity>(sql);
         }
 
-        public Task<LeadEntity?> GetLeadByIdAsync(int id)
+        public async Task<LeadEntity?> GetLeadByIdAsync(int id)
         {
             const string sql = "SELECT Id, Name, Email, Phone, CreatedAt FROM Leads WHERE Id = @Id;";
 
             using var connection = _context.CreateConnection();
-            return connection.QuerySingleOrDefaultAsync<LeadEntity>(sql, new { Id = id });
+            return await connection.QuerySingleOrDefaultAsync<LeadEntity>(sql, new { Id = id });
         }
 
-        public Task<int> UpdateLeadAsync(LeadEntity lead, CancellationToken ct = default)
+        public async Task<int> UpdateLeadAsync(LeadEntity lead, CancellationToken ct = default)
         {
             const string sql = @"
                 UPDATE Leads
@@ -57,7 +57,7 @@ namespace TestCRM.DAL.Repositories
 
             using var connection = _context.CreateConnection();
             var command = new CommandDefinition(sql, lead, cancellationToken: ct);
-            return connection.ExecuteAsync(command);
+            return await connection.ExecuteAsync(command);
         }
     }
 }

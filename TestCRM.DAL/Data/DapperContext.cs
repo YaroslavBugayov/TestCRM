@@ -10,7 +10,7 @@ namespace TestCRM.DAL.Data
 
         public DapperContext(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnectionString") 
+            _connectionString = configuration.GetConnectionString("DefaultConnection") 
                 ?? throw new ArgumentNullException("Connection string is missing in appsettings.json");
         }
 

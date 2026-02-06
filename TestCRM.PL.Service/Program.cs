@@ -3,7 +3,7 @@ using TestCRM.BLL.Services;
 using TestCRM.DAL.Data;
 using TestCRM.DAL.Interfaces;
 using TestCRM.DAL.Repositories;
-using TestCRM.PL.Service;
+using TestCRM.PL.Service.Workers;
 
 var builder = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
@@ -14,7 +14,8 @@ var builder = Host.CreateDefaultBuilder(args)
         services.AddSingleton<ILeadQueue, LeadQueue>();
         services.AddScoped<ILeadProcessor, LeadProcessor>();
 
-        services.AddHostedService<Worker>();
+        services.AddHostedService<LeadProcessingWorker>();
+        services.AddHostedService<MockLeadIngestionService>();
     })
     .UseWindowsService();
 

@@ -14,7 +14,7 @@ namespace TestCRM.BLL.Services
         private readonly ILeadRepository _repository = repository;
         private readonly ILogger<LeadProcessor> _logger = logger;
 
-        public Task ProcessLeadAsync(LeadDto leadDto, CancellationToken ct = default)
+        public async Task<int> ProcessLeadAsync(LeadDto leadDto, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();
 
@@ -23,11 +23,11 @@ namespace TestCRM.BLL.Services
                 if (!IsValidLead(leadDto))
                 {
                     _logger.LogWarning("Lead with ID {LeadId} failed validation and will not be processed.", leadDto.Id);
-                    return Task.CompletedTask;
+                    return -1;
                 }
 
                 var lead = MapToEntity(leadDto);
-                return _repository.CreateLeadAsync(lead, ct);
+                return await _repository.CreateLeadAsync(lead, ct);
             }
             catch (OperationCanceledException)
             {

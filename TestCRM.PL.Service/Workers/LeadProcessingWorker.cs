@@ -1,14 +1,14 @@
 using TestCRM.BLL.Interfaces;
 
-namespace TestCRM.PL.Service
+namespace TestCRM.PL.Service.Workers
 {
-    public class Worker : BackgroundService
+    public class LeadProcessingWorker : BackgroundService
     {
         private readonly ILeadQueue _leadQueue;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<LeadProcessingWorker> _logger;
 
-        public Worker(ILeadQueue leadQueue, IServiceScopeFactory scopeFactory, ILogger<Worker> logger)
+        public LeadProcessingWorker(ILeadQueue leadQueue, IServiceScopeFactory scopeFactory, ILogger<LeadProcessingWorker> logger)
         {
             _leadQueue = leadQueue;
             _scopeFactory = scopeFactory;
@@ -31,16 +31,16 @@ namespace TestCRM.PL.Service
                 var leadProcessor = scope.ServiceProvider.GetRequiredService<ILeadProcessor>();
                 try
                 {
-                    await leadProcessor.ProcessLeadAsync(leadDto, ct);
-                    _logger.LogInformation("Successfully processed lead with ID {LeadId}", leadDto.Id);
+                    var id = await leadProcessor.ProcessLeadAsync(leadDto, ct);
+                    _logger.LogInformation("Successfully processed lead {Email}", leadDto.Email);
                 }
                 catch (OperationCanceledException)
                 {
-                    _logger.LogInformation("Processing of lead with ID {LeadId} was canceled.", leadDto.Id);
+                    _logger.LogInformation("Processing of lead {Email} was canceled.", leadDto.Email);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error processing lead with ID {LeadId}", leadDto.Id);
+                    _logger.LogError(ex, "Error processing lead {Email}", leadDto.Email);
                 }
             });
         }
