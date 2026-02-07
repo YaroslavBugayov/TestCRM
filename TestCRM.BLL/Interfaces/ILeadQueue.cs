@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TestCRM.BLL.Models;
+﻿using TestCRM.BLL.Models;
 
 namespace TestCRM.BLL.Interfaces
 {
     public interface ILeadQueue
     {
-        ValueTask EnqueueAsync(LeadDto lead, CancellationToken ct = default);
-        IAsyncEnumerable<LeadDto> DequeueAllAsync(CancellationToken ct = default);
+        ValueTask EnqueueAsync(CreateLeadDto lead, CancellationToken ct = default);
+        IAsyncEnumerable<CreateLeadDto> DequeueAllAsync(CancellationToken ct = default);
     }
 }

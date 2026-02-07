@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.Extensions.Logging;
 using System.Threading.Channels;
 using TestCRM.BLL.Interfaces;
 using TestCRM.BLL.Models;
 
 namespace TestCRM.BLL.Services
 {
-    public class LeadQueue : ILeadQueue
+    public class LeadQueue(ILogger<LeadQueue> logger) : ILeadQueue
     {
-        private readonly Channel<LeadDto> _channel = Channel.CreateUnbounded<LeadDto>();
+        private readonly Channel<CreateLeadDto> _channel = Channel.CreateUnbounded<CreateLeadDto>();
 
-        public IAsyncEnumerable<LeadDto> DequeueAllAsync(CancellationToken ct)
+        public IAsyncEnumerable<CreateLeadDto> DequeueAllAsync(CancellationToken ct)
         {
             return _channel.Reader.ReadAllAsync(ct);
         }
 
-        public async ValueTask EnqueueAsync(LeadDto lead, CancellationToken ct)
+        public async ValueTask EnqueueAsync(CreateLeadDto lead, CancellationToken ct)
         {
             await _channel.Writer.WriteAsync(lead, ct);
+            logger.LogInformation("Lead enqueued: {Email}. Currenty in queue {Count} leads", lead.Email, _channel.Reader.Count);
         }
     }
 }

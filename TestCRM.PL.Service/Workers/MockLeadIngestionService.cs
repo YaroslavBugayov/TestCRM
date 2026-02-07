@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TestCRM.BLL.Interfaces;
+﻿using TestCRM.BLL.Interfaces;
 using TestCRM.BLL.Models;
 
 namespace TestCRM.PL.Service.Workers
 {
-    public class MockLeadIngestionService : BackgroundService
+    public class MockLeadIngestionService(
+        ILogger<MockLeadIngestionService> logger,
+        ILeadQueue leadQueue) : BackgroundService
     {
-        private readonly ILogger<MockLeadIngestionService> _logger;
-        private readonly ILeadQueue _leadQueue;
-
-        public MockLeadIngestionService(ILogger<MockLeadIngestionService> logger, ILeadQueue leadQueue)
-        {
-            _logger = logger;
-            _leadQueue = leadQueue;
-        }
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
@@ -28,17 +18,16 @@ namespace TestCRM.PL.Service.Workers
                 {
                     var randomNumber = random.Next(1000, 10000);
 
-                    var leadDto = new LeadDto
+                    var leadDto = new CreateLeadDto
                     {
                         Name = $"Test Lead {randomNumber}",
                         Email = $"lead{randomNumber}@example.com",
                         Phone = $"+3800000{randomNumber}",
-                        CreatedAt = DateTime.UtcNow
                     };
 
-                    _logger.LogInformation("Enqueuing lead: {Email}", leadDto.Email);
+                    logger.LogInformation("Enqueuing lead: {Email}", leadDto.Email);
                 
-                    await _leadQueue.EnqueueAsync(leadDto);
+                    await leadQueue.EnqueueAsync(leadDto);
                 }
 
                 var delaySeconds = random.Next(10);
