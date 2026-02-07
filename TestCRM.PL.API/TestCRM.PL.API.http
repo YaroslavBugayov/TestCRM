@@ -1,0 +1,6 @@
+@TestCRM.PL.API_HostAddress = http://localhost:5010
+
+GET {{TestCRM.PL.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

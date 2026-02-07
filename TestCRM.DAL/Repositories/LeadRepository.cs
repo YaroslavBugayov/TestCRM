@@ -9,7 +9,7 @@ namespace TestCRM.DAL.Repositories
     {
         private readonly DapperContext _context = context;
 
-        public async Task<int> CreateLeadAsync(LeadEntity lead, CancellationToken ct = default)
+        public async Task<int> CreateAsync(LeadEntity lead, CancellationToken ct = default)
         {
             const string sql = @"
                 INSERT INTO Leads (Name, Email, Phone, CreatedAt)
@@ -21,7 +21,7 @@ namespace TestCRM.DAL.Repositories
             return await connection.ExecuteScalarAsync<int>(command);
         }
 
-        public async Task<int> DeleteLeadAsync(int id, CancellationToken ct = default)
+        public async Task<int> DeleteAsync(int id, CancellationToken ct = default)
         {
             const string sql = "DELETE FROM Leads WHERE Id = @Id;";
 
@@ -30,23 +30,42 @@ namespace TestCRM.DAL.Repositories
             return await connection.ExecuteAsync(command);
         }
 
-        public async Task<IEnumerable<LeadEntity>> GetAllLeadsAsync()
+        public async Task<IEnumerable<LeadEntity>> GetAllAsync(CancellationToken ct = default)
         {
             const string sql = "SELECT Id, Name, Email, Phone, CreatedAt FROM Leads;";
 
             using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<LeadEntity>(sql);
+            var command = new CommandDefinition(sql, cancellationToken: ct);
+            return await connection.QueryAsync<LeadEntity>(command);
         }
 
-        public async Task<LeadEntity?> GetLeadByIdAsync(int id)
+        public async Task<LeadEntity?> GetByIdAsync(int id, CancellationToken ct = default)
         {
             const string sql = "SELECT Id, Name, Email, Phone, CreatedAt FROM Leads WHERE Id = @Id;";
 
             using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<LeadEntity>(sql, new { Id = id });
+            var command = new CommandDefinition(sql, new { Id = id }, cancellationToken: ct);
+            return await connection.QuerySingleOrDefaultAsync<LeadEntity>(command);
         }
 
-        public async Task<int> UpdateLeadAsync(LeadEntity lead, CancellationToken ct = default)
+        public async Task<IEnumerable<LeadEntity>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken ct = default)
+        {
+            int offset = (pageNumber - 1) * pageSize;
+
+            const string sql = @"
+                SELECT Id, Name, Email, Phone, CreatedAt 
+                FROM Leads 
+                ORDER BY CreatedAt DESC 
+                OFFSET @Offset ROWS 
+                FETCH NEXT @PageSize ROWS ONLY;";
+
+            using var connection = _context.CreateConnection();
+            var parameters = new { Offset = 0, PageSize = 10 };
+            var command = new CommandDefinition(sql, parameters, cancellationToken: ct);
+            return await connection.QueryAsync<LeadEntity>(command);
+        }
+
+        public async Task<int> UpdateAsync(LeadEntity lead, CancellationToken ct = default)
         {
             const string sql = @"
                 UPDATE Leads

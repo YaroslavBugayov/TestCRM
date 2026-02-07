@@ -27,7 +27,7 @@ namespace TestCRM.BLL.Services
                 }
 
                 var lead = MapToEntity(leadDto);
-                return await _repository.CreateLeadAsync(lead, ct);
+                return await _repository.CreateAsync(lead, ct);
             }
             catch (OperationCanceledException)
             {

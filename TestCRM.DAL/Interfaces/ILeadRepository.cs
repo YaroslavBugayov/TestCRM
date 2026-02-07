@@ -7,10 +7,11 @@ namespace TestCRM.DAL.Interfaces
 {
     public interface ILeadRepository
     {
-        Task<int> CreateLeadAsync(LeadEntity lead, CancellationToken ct = default);
-        Task<int> UpdateLeadAsync(LeadEntity lead, CancellationToken ct = default);
-        Task<int> DeleteLeadAsync(int id, CancellationToken ct = default);
-        Task<LeadEntity?> GetLeadByIdAsync(int id);
-        Task<IEnumerable<LeadEntity>> GetAllLeadsAsync();
+        Task<int> CreateAsync(LeadEntity lead, CancellationToken ct = default);
+        Task<int> UpdateAsync(LeadEntity lead, CancellationToken ct = default);
+        Task<int> DeleteAsync(int id, CancellationToken ct = default);
+        Task<LeadEntity?> GetByIdAsync(int id, CancellationToken ct = default);
+        Task<IEnumerable<LeadEntity>> GetAllAsync(CancellationToken ct = default);
+        Task<IEnumerable<LeadEntity>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken ct = default);
     }
 }
