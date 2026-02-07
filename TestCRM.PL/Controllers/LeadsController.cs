@@ -3,7 +3,7 @@ using TestCRM.BLL.Interfaces;
 using TestCRM.BLL.Models;
 using TestCRM.DAL.Interfaces;
 
-namespace TestCRM.PL.API.Controllers
+namespace TestCRM.PL.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

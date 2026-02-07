@@ -1,7 +1,7 @@
 ﻿using TestCRM.BLL.Interfaces;
 using TestCRM.BLL.Models;
 
-namespace TestCRM.PL.Service.Workers
+namespace TestCRM.PL.Workers
 {
     public class MockLeadIngestionService(
         ILogger<MockLeadIngestionService> logger,

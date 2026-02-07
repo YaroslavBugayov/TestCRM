@@ -1,6 +1,6 @@
 using TestCRM.BLL.Interfaces;
 
-namespace TestCRM.PL.Service.Workers
+namespace TestCRM.PL.Workers
 {
     public class LeadProcessingWorker(
         ILeadQueue leadQueue,

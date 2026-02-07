@@ -7,7 +7,7 @@
         "Action": "Start"
       },
       {
-        "Path": "TestCRM.PL.API\\TestCRM.PL.API.csproj",
+        "Path": "TestCRM.PL.API\\TestCRM.PL.csproj",
         "Action": "Start"
       }
     ]
