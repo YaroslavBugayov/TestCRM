@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "TestCRM.PL.Service\\TestCRM.PL.Service.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "TestCRM.PL.API\\TestCRM.PL.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
